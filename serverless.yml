@@ -1,0 +1,55 @@
+service: cert-confirm
+
+custom:
+    # Our stage is based on what is passed in when running serverless
+    # commands. Or falls back to what we have set in the provider section.
+    stage: ${opt:stage, 'offline'}
+    #region: ${file(./stages/${self:custom.stage}.yml):region}
+
+    bundle:
+        linting: false
+        sourcemaps: true
+        packager: yarn
+
+useDotenv: true
+
+provider:
+    name: aws
+    deploymentMethod: direct
+    #region: ${file(./stages/${self:custom.stage}.yml):region}
+    runtime: nodejs16.x
+    #environment: ${file(./stages/${self:custom.stage}.yml):environment}
+    timeout: 400
+    logRetentionInDays: 90
+    logs:
+        httpApi: true
+    #vpc:
+    #   securityGroupIds:
+    #      - ${file(./stages/${self:custom.stage}.yml):securityGroupId}
+    # subnetIds:
+    #    - ${file(./stages/${self:custom.stage}.yml):subnetId1}
+    #   - ${file(./stages/${self:custom.stage}.yml):subnetId2}
+    #  - ${file(./stages/${self:custom.stage}.yml):subnetId3}
+    iam:
+        role:
+            statements:
+                - Effect: Allow
+                  Action:
+                      - secretsmanager:GetSecretValue
+                      - sns:Publish
+                  Resource: "*"
+
+functions:
+    create-cert-post:
+        handler: src/handlers/http/create-cert-post.createCert
+        events:
+            - httpApi:
+                  path: "/api/v1/cert"
+                  method: "POST"
+
+package:
+    individually: true
+
+plugins:
+    - serverless-bundle
+    - serverless-offline
