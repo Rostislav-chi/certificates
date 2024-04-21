@@ -1,29 +1,27 @@
 {
-  "name": "nuxtship-template",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@nuxtjs/tailwindcss": "^6.12.0",
-    "@tailwindcss/typography": "^0.5.10",
-    "autoprefixer": "^10.4.16",
-    "nuxt": "^3.9.0",
-    "nuxt-icon": "^0.6.8",
-    "postcss": "^8.4.32",
-    "tailwindcss": "^3.4.0",
-    "vue": "^3.4.3",
-    "vue-router": "^4.2.5"
-  },
-  "dependencies": {
-    "@formkit/core": "^1.6.2",
-    "@formkit/icons": "^1.6.2",
-    "@formkit/nuxt": "^1.6.2",
-    "@formkit/vue": "^1.6.2"
-  }
+    "name": "hardhat-project",
+    "scripts": {
+        "deploy:dev": "sls deploy --stage develop --verbose --aws-profile develop-backend",
+        "dev": "sls offline start --reloadHandler --stage offline --verbose"
+    },
+    "devDependencies": {
+        "serverless": "^3.31.0",
+        "serverless-bundle": "^6.0.0",
+        "typescript": "^5.2.2",
+        "@types/nodemailer": "^6.4.4"
+    },
+    "dependencies": {
+        "@types/aws-lambda": "^8.10.131",
+        "@typescript-eslint/eslint-plugin": "^6.9.1",
+        "@typescript-eslint/parser": "^6.9.1",
+        "aws-sdk": "^2.1536.0",
+        "dotenv": "^16.4.5",
+        "eslint": "^8.54.0",
+        "eslint-plugin-react": "^7.33.1",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "ethers": "^6.9.1",
+        "nodemailer": "^6.9.13",
+        "serverless-offline": "^10.0.0",
+        "zokrates-js": "^1.1.9"
+    }
 }
