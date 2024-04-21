@@ -1,4 +1,29 @@
-import { BadRequestError } from "./errors";
+import * as crypto from "crypto";
+import nodemailer from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
+
+const algorithm = "aes-256-cbc";
+const iv = "1234567890123456";
+
+export function encryptMessageWithKey(text: string, key: string): string {
+    const paddedKey = key.padStart(32, "0");
+
+    const cipher = crypto.createCipheriv(algorithm, paddedKey, iv);
+    let encrypted = cipher.update(text, "utf-8", "hex");
+    encrypted += cipher.final("hex");
+    return encrypted;
+}
+
+export function decryptMessageWithKey(
+    encryptedText: string,
+    key: string
+): string {
+    const paddedKey = key.padStart(32, "0");
+    const decipher = crypto.createDecipheriv(algorithm, paddedKey, iv);
+    let decrypted = decipher.update(encryptedText, "hex", "utf-8");
+    decrypted += decipher.final("utf-8");
+    return decrypted;
+}
 
 export enum StatusCodes {
     OK = 200,
@@ -92,27 +117,21 @@ export function getHttpResponse(
     };
 }
 
-async function baseHandleRequest(
-    RequestModelType: new (req: any) => any,
-    handlerFunc: (params: any) => any,
-    event: any
-): Promise<any> {
-    const req = getHttpRequest(event);
+export async function sendEmail(toAddress: string, message: string) {
+    const mailOptions = {
+        from: "mike@loopcrypto.xyz",
+        to: toAddress,
+        subject: "Your Personalized Code",
+        text: `Code is: ${message}`,
+    };
 
-    let requestModel = {};
-    try {
-        requestModel = new RequestModelType(req);
-    } catch (error) {
-        throw new BadRequestError("Error while building request model");
-    }
-    const responseModel = await handlerFunc(requestModel);
-    return getHttpResponse(StatusCodes.OK, responseModel);
-}
+    const transport = nodemailer.createTransport({
+        service: "Postmark",
+        auth: {
+            user: "c84d516b-26a3-4fbb-817a-23c06527857a",
+            pass: "c84d516b-26a3-4fbb-817a-23c06527857a",
+        },
+    } as SMTPTransport.Options);
 
-export async function handleRequestNoRoleCheck(
-    RequestModelType: new (req: any) => any,
-    handlerFunc: (params: any) => any,
-    event: any
-): Promise<any> {
-    return baseHandleRequest(RequestModelType, handlerFunc, event);
+    await transport.sendMail(mailOptions);
 }

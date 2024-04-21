@@ -1,3 +1,6 @@
+org: mirivera
+app: hackathon
+
 service: cert-confirm
 
 custom:
@@ -19,7 +22,6 @@ provider:
     #region: ${file(./stages/${self:custom.stage}.yml):region}
     runtime: nodejs16.x
     #environment: ${file(./stages/${self:custom.stage}.yml):environment}
-    timeout: 400
     logRetentionInDays: 90
     logs:
         httpApi: true
@@ -40,11 +42,22 @@ provider:
                   Resource: "*"
 
 functions:
-    create-cert-post:
-        handler: src/handlers/http/create-cert-post.createCert
+    create-cert:
+        handler: src/handlers/http/create-utils.createCert
+        timeout: 120
+        memorySize: 1028
         events:
             - httpApi:
                   path: "/api/v1/cert"
+                  method: "POST"
+
+    decode-encrypted-data:
+        handler: src/handlers/http/decode-utils.decodeEncryptedData
+        timeout: 25
+        memorySize: 1028
+        events:
+            - httpApi:
+                  path: "/api/v1/decode"
                   method: "POST"
 
 package:
