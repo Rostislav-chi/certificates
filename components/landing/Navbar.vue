@@ -4,16 +4,16 @@ const menuitems = [
     title: "Home",
     path: "/",
   },
+  // {
+  //   title: "About",
+  //   path: "/about",
+  // },
+  // {
+  //   title: "Pricing",
+  //   path: "/pricing",
+  // },
   {
-    title: "About",
-    path: "/about",
-  },
-  {
-    title: "Pricing",
-    path: "/pricing",
-  },
-  {
-    title: "Validate",
+    title: "Validate certificate",
     path: "/validate",
   },
   {
@@ -37,9 +37,13 @@ const open = ref(false);
   <LandingContainer>
     <header class="flex flex-col lg:flex-row justify-between items-center my-5">
       <div class="flex w-full lg:w-auto items-center justify-between">
-        <a href="/" class="text-lg"
-          ><span class="font-bold text-slate-800">Certi</span
-          ><span class="text-slate-500">con</span>
+        <a href="/" class="text-lg">
+          <img
+            src="/logo/logo_certicon_horizontal.png"
+            format="avif"
+            alt="CertiCon"
+            class="w-full h-8 object-cover rounded transition group-hover:-translate-y-1 group-hover:shadow-xl"
+          />
         </a>
         <div class="block lg:hidden">
           <button @click="open = !open" class="text-gray-800">

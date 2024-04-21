@@ -7,7 +7,7 @@ definePageMeta({
 <template>
   <div>
     <LandingContainer>
-      <LandingCreateform class="flex justify-center" />
+      <LandingCreateform />
     </LandingContainer>
   </div>
 </template>
